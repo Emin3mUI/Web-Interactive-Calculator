@@ -69,7 +69,6 @@ interactive-calculator/
 ├── style.css        # Layout, theming, responsive rules, hover/focus states
 ├── script.js        # Calculator state management, event bindings, formatting
 ├── README.md        # Project documentation (this file)
-└── screenshots/     # Example images for documentation
 ```
 
 ---
@@ -105,8 +104,8 @@ interactive-calculator/
 
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/yourusername/interactive-calculator.git
-   cd interactive-calculator
+   git clone https://github.com/Emin3mUI/Web-Interactive-Calculator.git
+   cd Web-Interactive-Calculator
    ```
 2. **Serve locally** (optional)
    - You can open `index.html` directly, or run a simple HTTP server:
@@ -154,4 +153,4 @@ Please include clear descriptions and ensure code follows the existing style.
 
 ## License
 
-This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
+This project is licensed under the **APACHE License**. See APACHE for details.
