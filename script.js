@@ -3,58 +3,11 @@ const calculator = {
   firstOperand: null,
   waitingForSecondOperand: false,
   operator: null,
-  resetDisplayOnNextDigit: false,
+  resetDisplayOnNextDigit: false
 };
 
 const historyDisplay = document.querySelector('.calculator-history');
 const screenDisplay = document.querySelector('.calculator-screen');
-
-// Map keyboard keys to calculator buttons
-const keyMap = {
-  '0': '0','1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7','8':'8','9':'9',
-  '+': '+','-':'-','*':'*','/':'/','=':'=','Enter':'=','.':'.',
-  'Backspace': 'all-clear','Escape':'all-clear'
-};
-
-document.addEventListener('keydown', (e) => {
-  const key = keyMap[e.key];
-  if (!key) return;
-  const button = document.querySelector(`button[value="${key}"]`);
-  if (button) button.click();
-});
-
-document.querySelector('.calculator-keys').addEventListener('click', (event) => {
-  const { target } = event;
-  if (!target.matches('button')) return;
-
-  const { value, classList } = target;
-  if (classList.contains('operator')) {
-    handleOperator(value);
-    updateDisplay();
-    return;
-  }
-
-  if (classList.contains('equal-sign')) {
-    handleEqual();
-    updateDisplay();
-    return;
-  }
-
-  if (classList.contains('decimal')) {
-    inputDecimal(value);
-    updateDisplay();
-    return;
-  }
-
-  if (classList.contains('all-clear')) {
-    resetCalculator();
-    updateDisplay();
-    return;
-  }
-
-  inputDigit(value);
-  updateDisplay();
-});
 
 function updateDisplay() {
   screenDisplay.value = calculator.displayValue;
@@ -71,7 +24,6 @@ function inputDigit(digit) {
     updateHistory('');
     return;
   }
-
   const { displayValue, waitingForSecondOperand } = calculator;
   if (waitingForSecondOperand) {
     calculator.displayValue = digit;
@@ -79,19 +31,6 @@ function inputDigit(digit) {
   } else {
     calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
   }
-}
-
-function inputDecimal(dot) {
-  if (calculator.waitingForSecondOperand || calculator.resetDisplayOnNextDigit) return;
-  if (!calculator.displayValue.includes(dot)) calculator.displayValue += dot;
-}
-
-function formatResult(result, operator) {
-  if (operator === '/') {
-    if (Number.isInteger(result)) return result.toString();
-    return parseFloat(result.toFixed(5)).toString();
-  }
-  return parseFloat(result.toFixed(7)).toString();
 }
 
 function handleOperator(nextOperator) {
@@ -108,28 +47,28 @@ function handleOperator(nextOperator) {
     calculator.firstOperand = inputValue;
   } else if (operator) {
     const result = calculate(firstOperand, inputValue, operator);
-    calculator.displayValue = formatResult(result, operator);
+    calculator.displayValue = String(result);
     calculator.firstOperand = result;
   }
 
   calculator.operator = nextOperator;
   calculator.waitingForSecondOperand = true;
-  calculator.resetDisplayOnNextDigit = false;
   updateHistory(`${calculator.firstOperand} ${nextOperator}`);
 }
 
 function handleEqual() {
   const { firstOperand, displayValue, operator } = calculator;
   const inputValue = parseFloat(displayValue);
-  if (!operator || calculator.waitingForSecondOperand) return;
+  if (operator == null || calculator.waitingForSecondOperand) return;
 
   const result = calculate(firstOperand, inputValue, operator);
   updateHistory(`${firstOperand} ${operator} ${inputValue} =`);
-  calculator.displayValue = formatResult(result, operator);
+  calculator.displayValue = String(result);
   calculator.firstOperand = null;
   calculator.operator = null;
   calculator.waitingForSecondOperand = false;
   calculator.resetDisplayOnNextDigit = true;
+  updateDisplay();
 }
 
 function resetCalculator() {
@@ -139,6 +78,7 @@ function resetCalculator() {
   calculator.operator = null;
   calculator.resetDisplayOnNextDigit = false;
   updateHistory('');
+  updateDisplay();
 }
 
 function calculate(first, second, operator) {
@@ -146,7 +86,37 @@ function calculate(first, second, operator) {
     case '+': return first + second;
     case '-': return first - second;
     case '*': return first * second;
-    case '/': return first / second;
+    case '/': return second !== 0 ? parseFloat((first / second).toFixed(5)) : 'Error';
   }
   return second;
 }
+
+// Button click handler
+const buttons = document.querySelectorAll('button');
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.classList.contains('operator')) {
+      handleOperator(btn.value);
+      updateDisplay();
+    } else if (btn.classList.contains('equal-sign')) {
+      handleEqual();
+    } else if (btn.classList.contains('decimal')) {
+      // no decimal in this layout
+    } else if (btn.classList.contains('all-clear')) {
+      resetCalculator();
+    } else {
+      inputDigit(btn.value);
+      updateDisplay();
+    }
+  });
+});
+
+// Keyboard support
+document.addEventListener('keydown', (e) => {
+  let key = e.key;
+  if (key === 'Enter') key = '=';
+  if (/[0-9/*+\-]/.test(key) || key === '=') {
+    const btn = document.querySelector(`button[value="${key}"]`);
+    if (btn) btn.click();
+  }
+});

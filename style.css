@@ -3,77 +3,95 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #f3f3f3;
   margin: 0;
-  font-family: Segoe UI, sans-serif;
+  background: #f3f3f3;
+  font-family: Arial, sans-serif;
 }
-
 .calculator {
-  background: #333;
-  padding: 16px;
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  width: fit-content;
-}
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(1.5)
 
+}
 .calculator-history {
-  color: #bbb;
+  width: 260px;
+  height: 20px;
+  color: #888;
   font-size: 0.9rem;
   text-align: right;
-  height: 1.2rem;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   overflow-x: auto;
 }
-
 .calculator-screen {
-  width: 100%;
+  width: 260px;
   height: 48px;
   border: none;
-  background: #000;
+  background: #252525;
   color: #0f0;
   font-size: 2rem;
   text-align: right;
-  
-  margin-bottom: 16px;
-  border-radius: 6px;
+  padding: 0 12px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+}
+.calculator-body {
+  display: flex;
 }
 
-.calculator-keys {
-  display: grid;
-  grid-template-columns: repeat(4, 56px);
-  grid-template-rows: repeat(5, 56px);
-  gap: 8px;
-}
 
-.calculator-keys button {
-  font-size: 1.2rem;
+.operators {
+  display: flex;
+  flex-direction: column;
+  margin-right: 8px;
+}
+.operators button {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 4px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  background: #444;
-  color: #fff;
+  background: #eee;
+  font-size: 1.2rem;
 }
-
-.calculator-keys button:hover {
-  background: #555;
-}
-
-.operator {
+.operators .operator {
   background: #fe9505;
   color: #fff;
 }
-
-.equal-sign {
-  background: #00a400;
+.operators .equal-sign {
+  background: #0078d4;
   color: #fff;
-  grid-row: 2 / span 2;
+  margin-top: auto;
 }
-
-.all-clear {
-  background: #d62d20;
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  grid-auto-rows: 60px;
+  grid-gap: 4px;
+}
+.numbers button {
+  border: none;
+  border-radius: 4px;
+  background: #ddd;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.numbers .zero {
+  grid-column: 1 / span 3;
+  background: #ddd;
+}
+.operators button:hover,
+.numbers button:hover {
+  background-color: #321f5c;        /* a bit lighter/darker than normal */
+  transform: translateY(-2px);    /* lift it up 2px */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   color: #fff;
 }
 
-.zero {
-  grid-column: 1 / span 2;
-}
+
